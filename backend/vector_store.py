@@ -3,23 +3,39 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 
-# Load data
+# -------------------------------
+# LOAD TEXT DATA (FAQ / EXPLANATIONS)
+# -------------------------------
 loader = TextLoader("data/students.txt")
 documents = loader.load()
 
 print("Loaded Data:", documents)
 
-# Split data
-splitter = CharacterTextSplitter(chunk_size=200, chunk_overlap=20)
+# -------------------------------
+# SPLIT TEXT
+# -------------------------------
+splitter = CharacterTextSplitter(
+    chunk_size=200,
+    chunk_overlap=20
+)
+
 docs = splitter.split_documents(documents)
 
 print("Chunks:", docs)
 
-# Convert to embeddings
+# -------------------------------
+# EMBEDDINGS MODEL
+# -------------------------------
 embeddings = HuggingFaceEmbeddings()
 
-# Store in FAISS
+# -------------------------------
+# CREATE FAISS INDEX
+# -------------------------------
 db = FAISS.from_documents(docs, embeddings)
+
+# -------------------------------
+# SAVE VECTOR DB
+# -------------------------------
 db.save_local("faiss_index")
 
 print("Vector DB Created Successfully!")

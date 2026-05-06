@@ -1,81 +1,130 @@
-# 🎓 Student Result Query Bot
+# 🎓 AI Student Result Query Bot
 
-## 📌 Project Overview
-This project is a GenAI-based chatbot that answers student-related queries such as marks, attendance, total scores, and class performance.
-
-It uses a hybrid approach combining:
-- Rule-based logic for accurate responses
-- Retrieval-Augmented Generation (RAG) for flexible queries
+A FastAPI + SQLite + Streamlit + RAG (FAISS) based AI system that answers student-related queries like marks, topper, and attendance using natural language.
 
 ---
 
 ## 🚀 Features
-- Marks, Attendance, Total Queries
-- Topper Identification
-- Chart Visualization
-- Query History (Saved Questions)
-- AI-based Q&A using LangChain
+
+- 🧠 Natural language to SQL conversion
+- 📊 Student marks visualization
+- 🏆 Topper detection system
+- 📅 Attendance queries
+- 🤖 RAG fallback using FAISS vector search
+- ⚡ FastAPI backend
+- 🎨 Streamlit chat-style frontend
+- 🗄️ SQLite database integration
 
 ---
 
-## 🛠️ Tech Stack
-- FastAPI (Backend)
-- Streamlit (Frontend)
-- LangChain
-- FAISS
-- HuggingFace (FLAN-T5)
-
----
-
-## 📁 Project Structure
+## 🏗️ Project Structure
 student-query-bot/
 │
 ├── backend/
-│ └── main.py
+│ ├── main.py
+│ ├── database.py
+│ ├── intent.py
+│ ├── rag.py
+│ ├── sql_engine.py
+│ ├── sql_query.py
+│ ├── vector_store.py
 │
 ├── frontend/
 │ └── app.py
 │
-├── data/
-│ └── students.txt
-│
+├── students.db
 ├── faiss_index/
-│
+├── db_setup.py
 ├── test_cases.txt
-├── README.md
+├── requirements.txt
 
 ---
 
-## ▶️ How to Run
+## 🗄️ Database
 
-### 1. Start Backend
+- SQLite database: `students.db`
+- Table: `students`
+
+### Schema:
+
+```sql
+students(
+    name TEXT,
+    maths INTEGER,
+    science INTEGER,
+    english INTEGER,
+    total INTEGER,
+    attendance INTEGER
+)
+```
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/your-username/student-query-bot.git
+cd student-query-bot
+
+pip install -r requirements.txt
+```
+
+---
+
+## 🧱 Setup Database
+
+```bash
+python db_setup.py
+```
+
+---
+
+## 🚀 Run Project
+
+### Start Backend
+
+```bash
 uvicorn backend.main:app --reload
+```
 
-### 2. Start Frontend
+### Start Frontend
+
+```bash
 streamlit run frontend/app.py
+```
 
 ---
 
-## 🧪 Test Cases
-Refer to `test_cases.txt` for validation.
+## 🧪 Example Queries
+
+- marks of Meena  
+- marks of Aisha  
+- who is topper  
+- attendance of Meena  
+- attendance of Aisha  
 
 ---
 
-## 🧠 How It Works
-1. User enters query in Streamlit UI  
-2. FastAPI processes request  
-3. Rule-based logic handles structured queries  
-4. LangChain + FAISS handles AI queries  
-5. Response is returned to UI  
+## 🧠 Tech Stack
+
+- FastAPI  
+- Streamlit  
+- SQLite  
+- LangChain  
+- HuggingFace Transformers  
+- FAISS  
 
 ---
 
-## 👩‍💻 Author
-Sadhiya Zainab  
-CSE Department  
+## 📌 Future Improvements
+
+- Chat memory system  
+- Multi-user login  
+- Cloud deployment  
+- Voice input support  
 
 ---
 
-## 📌 Notes
-- Dummy data is used  
-- No sensitive information exposed  
+## 👨‍💻 Author
+
+AI Student Query Bot Project (Week 2 GenAI Learning Project)

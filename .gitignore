@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Database files
+data/students.db
+
+# FAISS index
+data/faiss_index/
+
+# Environment (optional)
+.env

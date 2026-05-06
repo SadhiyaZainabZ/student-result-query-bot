@@ -1,8 +1,14 @@
 fastapi
 uvicorn
+streamlit
+requests
+pandas
+
 langchain
 langchain-community
+
 transformers
+sentence-transformers
+
 faiss-cpu
-streamlit
-pandas
+torch
