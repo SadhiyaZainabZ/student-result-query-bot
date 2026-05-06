@@ -1,0 +1,20 @@
+Student Name: Aisha
+Maths: 90
+Science: 85
+English: 88
+Total: 263
+Attendance: 92%
+
+Student Name: Meena
+Maths: 95
+Science: 92
+English: 94
+Total: 281
+Attendance: 96%
+
+Student Name: Rahul
+Maths: 80
+Science: 78
+English: 82
+Total: 240
+Attendance: 85%
