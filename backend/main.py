@@ -3,51 +3,68 @@ from backend.sql_engine import rule_based_sql, clean_sql
 from backend.sql_query import run_query
 from backend.intent import detect_intent
 from backend.rag import run_rag
+from backend.logger import save_log
+from backend.explainer import explain_result
 
 app = FastAPI()
 
+# -------------------------------
+# 💾 QUERY HISTORY
+# -------------------------------
 query_history = []
 
 # -------------------------------
-# HOME
+# 🚀 HOME
 # -------------------------------
 @app.get("/")
 def home():
-    return {"message": "Student Bot Running (Week 2 Upgrade)"}
+    return {
+        "message": "🎓 Student Bot Running (Week 3 Upgrade)"
+    }
 
 # -------------------------------
-# ASK ENDPOINT
+# 🚀 ASK ENDPOINT
 # -------------------------------
 @app.get("/ask")
 def ask(query: str):
 
+    # -------------------------------
+    # SAVE HISTORY
+    # -------------------------------
     query_history.append(query)
     query_history[:] = query_history[-10:]
 
     # -------------------------------
-    # STEP 1: INTENT DETECTION
+    # STEP 1 → DETECT INTENT
     # -------------------------------
     intent = detect_intent(query)
 
     # -------------------------------
-    # STEP 2: SQL GENERATION (RULE BASED)
+    # STEP 2 → GENERATE SQL
     # -------------------------------
     sql = rule_based_sql(query)
     sql = clean_sql(sql)
 
     # -------------------------------
-    # STEP 3: SQL FLOW (structured handling)
+    # STEP 3 → STRUCTURED SQL FLOW
     # -------------------------------
     if intent in ["marks", "attendance", "topper"]:
 
+        # -------------------------------
+        # SQL VALIDATION
+        # -------------------------------
         if not sql:
             return {
                 "intent": intent,
                 "error": "SQL not generated"
             }
 
+        # -------------------------------
+        # RUN QUERY
+        # -------------------------------
         try:
             result = run_query(sql)
+
         except Exception as e:
             return {
                 "intent": intent,
@@ -55,6 +72,9 @@ def ask(query: str):
                 "sql": sql
             }
 
+        # -------------------------------
+        # NO DATA
+        # -------------------------------
         if not result:
             return {
                 "intent": intent,
@@ -62,12 +82,22 @@ def ask(query: str):
                 "sql": sql
             }
 
-        # ---------------- MARKS ----------------
+        # =================================================
+        # 📊 MARKS
+        # =================================================
         if intent == "marks":
+
             m, s, e = result[0]
+
+            answer = f"Maths {m}, Science {s}, English {e}"
+
+            # ✅ SAVE LOG
+            save_log(query, sql, answer)
+
             return {
                 "intent": intent,
-                "answer": f"Maths {m}, Science {s}, English {e}",
+                "answer": answer,
+                "explanation": explain_result(intent, result),
                 "sql": sql,
                 "chart": {
                     "marks": {
@@ -78,42 +108,73 @@ def ask(query: str):
                 }
             }
 
-        # ---------------- ATTENDANCE ----------------
+        # =================================================
+        # 📅 ATTENDANCE
+        # =================================================
         if intent == "attendance":
+
+            attendance = result[0][0]
+
+            answer = f"Attendance: {attendance}%"
+
+            # ✅ SAVE LOG
+            save_log(query, sql, answer)
+
             return {
                 "intent": intent,
-                "answer": f"Attendance: {result[0][0]}%",
+                "answer": answer,
+                "explanation": explain_result(intent, result),
                 "sql": sql
             }
 
-        # ---------------- TOPPER ----------------
+        # =================================================
+        # 🏆 TOPPER
+        # =================================================
         if intent == "topper":
+
             name, total = result[0]
+
+            answer = f"{name} is topper with {total} marks"
+
+            # ✅ SAVE LOG
+            save_log(query, sql, answer)
+
             return {
                 "intent": intent,
-                "answer": f"{name} is topper with {total} marks",
+                "answer": answer,
+                "explanation": explain_result(intent, result),
                 "sql": sql
             }
 
     # -------------------------------
-    # STEP 4: FALLBACK → RAG (GENAI)
+    # STEP 4 → RAG FALLBACK
     # -------------------------------
     try:
+
         rag_answer = run_rag(query)
+
+        # ✅ SAVE LOG
+        save_log(query, "RAG", rag_answer)
+
         return {
             "intent": "general",
             "answer": rag_answer
         }
-    except:
+
+    except Exception as e:
+
         return {
             "intent": "general",
-            "answer": "Unable to process query"
+            "answer": "Unable to process query",
+            "error": str(e)
         }
 
-
 # -------------------------------
-# HISTORY
+# 📜 HISTORY
 # -------------------------------
 @app.get("/history")
 def history():
-    return {"history": query_history}
+
+    return {
+        "history": query_history
+    }

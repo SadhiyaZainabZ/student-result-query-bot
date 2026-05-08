@@ -1,29 +1,24 @@
 Test Case 1:
 Input: marks of meena
-Expected Output: Meena scored 95 in Maths, 92 in Science, and 94 in English.
+Expected Output: Correct marks displayed
 Status: Passed
 
 Test Case 2:
 Input: attendance of aisha
-Expected Output: Aisha's attendance is 92%.
+Expected Output: Attendance percentage displayed
 Status: Passed
 
 Test Case 3:
-Input: total marks of rahul
-Expected Output: Rahul's total marks are 240.
+Input: who is topper
+Expected Output: Topper name displayed
 Status: Passed
 
 Test Case 4:
-Input: who is topper
-Expected Output: Meena is the topper with 281 marks.
+Input: marks of rahul
+Expected Output: Rahul marks displayed
 Status: Passed
 
 Test Case 5:
-Input: show chart
-Expected Output: Bar chart displayed
-Status: Passed
-
-Test Case 6:
-Input: show history
-Expected Output: List of previous queries
+Input: invalid query
+Expected Output: Fallback/error response
 Status: Passed

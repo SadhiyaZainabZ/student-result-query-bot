@@ -9,6 +9,6 @@ langchain-community
 
 transformers
 sentence-transformers
+torch
 
 faiss-cpu
-torch
